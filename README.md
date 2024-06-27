@@ -1,166 +1,152 @@
-# Java Web Sockets Programming
+# Java Web Socket Programming Assignment
 
-## Table of contents
+## Group Members:
+- Walter Onyango - C026-01-0978/2022
+- Samwel Njuguna - C026-01-0940/2022
+- Clint Simiyu - C026-01-0972/2022
+- Gibson Gichuru
+- Brian Chege
+- Baruk Ali
 
+## Tasks
+1. Write Software Engineering Requirements:
+   - Identify functional and non-functional requirements.
+   - Create necessary diagrams (e.g., use case diagrams, sequence diagrams).
 
-## Overview
+2. Describe Algorithm Design:
+   - Detail the interactions between clients and the server.
+   - Provide pseudocode or flowcharts if necessary.
 
-This repository contains a simple implementation of a server and multiple clients using Java DatagramSockets for communication. The server listens for messages from clients, displays them, and keeps track of the number of messages received from each client. Clients can send messages to the server and terminate the connection by sending "bye".
+3. Develop TCP-based Java Implementation:
+   - Implement the client and server code.
+   - Ensure the code is robust, well-structured, and properly commented.
+   - Handle exceptions and edge cases.
 
-## Features
+4. Test the Implementation:
+   - Perform thorough testing to identify and document bugs or unexpected behaviours.
 
-- **Server-Client Communication**: The server listens for messages from multiple clients.
-- **Message Tracking**: The server keeps track of the number of messages received from each client.
-- **Termination Command**: Clients can terminate the connection by sending "bye".
+5. Discuss Alternative Implementation Using UDP:
+   - Compare TCP and UDP implementations.
+   - Discuss the advantages and disadvantages of each approach.
 
-## Installation
+6. Prepare Deliverables:
+   - Technical report (4-5 pages).
+   - Complete code as an appendix.
+   - Instructions for running the system.
 
-### Prerequisites
+## Solution
 
-- Java Development Kit (JDK) 11 or higher
-- Java Runtime Environment (JRE) 11 or higher
+### Software Engineering Requirements
 
-### Cloning the Repository
+#### Functional Requirements
+- The system should allow multiple clients to connect to a central server.
+- Messages sent by one client should be received by all connected clients.
+- Users should be able to join and leave the chat at any time.
+- Users must choose nicknames when joining the chat.
 
-To clone the repository, use the following command:
+#### Non-functional Requirements
+- The system should be robust against client crashes and blocked connections.
+- Incoming messages should be buffered while the user is typing.
+- The implementation should be simple and run in a text-mode window.
 
+### Diagrams
+
+#### Use Case Diagram
+
+![Alt text](usecase.png)
+
+#### Sequence Diagram
+Illustrates the interaction between the client and server during connection, message sending, and message receiving.
+
+### Algorithm Design
+
+#### Client-Server Interaction
+- Client connects to the server.
+- Client sends messages to the server.
+- Server broadcasts messages to all connected clients.
+- Client receives messages from the server and displays them.
+
+#### Pseudocode
+
+**Client:**
+- Connect to the server.
+- Enter a nickname.
+- Loop:
+  - Send a message to the server.
+  - Receive messages from server and display.
+
+**Server:**
+- Accept client connections.
+- Loop:
+  - Receive messages from clients.
+  - Broadcast messages to all connected clients.
+
+# Steps to Run Multiple Clients
+
+## Start the Server:
+1. Open a terminal.
+2. Navigate to the directory containing the server code.
+3. Compile the server code:
+    ```sh
+    javac ChatServer.java
+    ```
+4. Run the server:
+    ```sh
+    java ChatServer
+    ```
+5. The server will start and wait for client connections.
+
+## Start the First Client:
+1. Open another terminal (or a new tab in the same terminal).
+2. Navigate to the directory containing the client code.
+3. Compile the client code:
+    ```sh
+    javac ChatClient.java
+    ```
+4. Run the client:
+    ```sh
+    java ChatClient
+    ```
+5. Enter the server address (e.g., localhost) and port number (e.g., 12345).
+6. Enter your nickname and start chatting.
+
+## Start the Second Client:
+1. Open yet another terminal (or another new tab in the same terminal).
+2. Navigate to the directory containing the client code.
+3. Compile the client code (if not already compiled):
+    ```sh
+    javac ChatClient.java
+    ```
+4. Run the client:
+    ```sh
+    java ChatClient
+    ```
+5. Enter the server address (e.g., localhost) and port number (e.g., 12345).
+6. Enter a different nickname and start chatting.
+
+## Demonstration
+Once you have the server and both clients running, you can start sending messages from each client. Each message sent from one client should be received and displayed by the other client.
+
+Here’s a quick demonstration of how the interactions would look:
+
+### Client 1:
 ```sh
-git clone https://github.com/yourusername/Java-WebSockets.git
-cd Java-WebSockets
-```
-
-## Compilation
-
-To compile the Java files, open a terminal and navigate to the directory containing the files, then run:
-
+Enter your nickname: Alice
+Alice: Hello, everyone!
+ ```
+### Client 2:
 ```sh
-javac Server.java Client.java Client2.java
-```
+Enter your nickname: Bob
+Alice: Hello, everyone!
+Bob: Hi Alice!
 
-## Running
-
-### Running the Server
-
-Start the server by running:
-
+ ```
+### Client 1:
 ```sh
-java Server
-```
+Alice: Hello, everyone!
+Bob: Hi Alice!
+Alice: How are you, Bob?
 
-This will start the server, which listens on port 1234 for incoming messages.
+ ```
+![Alt text](demo.jpeg)
 
-### Running the Clients
-
-Start the clients by running the following in separate terminal windows:
-
-```sh
-java Client
-```
-
-```sh
-java Client2
-```
-
-Both clients will prompt you to enter messages, which will be sent to the server.
-
-### Stopping the Server and Clients
-
-To stop the server or a client, type `bye` and press Enter. This will terminate the connection and stop the server or client.
-
-## Contribute
-
-Contributions are welcome! If you have any improvements or suggestions, feel free to open an issue or create a pull request.
-
-### Steps to Contribute
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add new feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Open a pull request.
-
-## Support
-
-If you have any issues or questions, please open an issue in this repository.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Code Explanation
-
-### Server.java
-
-The server-side implementation performs the following steps:
-
-1. **Initialize DatagramSocket**: The server listens on port 1234.
-   ```java
-   DatagramSocket ds = new DatagramSocket(1234);
-   ```
-
-2. **Receive DatagramPacket**: The server waits to receive packets from clients.
-   ```java
-   DatagramPacket DpReceive = new DatagramPacket(receive, receive.length);
-   ds.receive(DpReceive);
-   ```
-
-3. **Extract and Track Client Information**: The server extracts the client's address and port, tracks the client, and counts the number of messages received from each client.
-   ```java
-   InetAddress clientAddress = DpReceive.getAddress();
-   int clientPort = DpReceive.getPort();
-   String clientKey = clientAddress.toString() + ":" + clientPort;
-   ```
-
-4. **Display Client Messages**: The server prints the client's message and the message count.
-   ```java
-   System.out.println("Client (" + clientId + "): " + data(receive));
-   ```
-
-5. **Terminate on "bye"**: The server stops if a client sends "bye".
-   ```java
-   if (data(receive).toString().equals("bye")) {
-       break;
-   }
-   ```
-
-### Client.java and Client2.java
-
-Both client-side implementations perform the following steps:
-
-1. **Initialize DatagramSocket**: The client creates a socket for communication.
-   ```java
-   DatagramSocket ds = new DatagramSocket();
-   ```
-
-2. **Read User Input**: The client reads messages from the user.
-   ```java
-   Scanner sc = new Scanner(System.in);
-   String inp = sc.nextLine();
-   ```
-
-3. **Send DatagramPacket**: The client sends the message to the server.
-   ```java
-   DatagramPacket DpSend = new DatagramPacket(buf, buf.length, ip, 1234);
-   ds.send(DpSend);
-   ```
-
-4. **Terminate on "bye"**: The client stops if the user types "bye".
-   ```java
-   if (inp.equals("bye")) {
-       break;
-   }
-   ```
-
-## Conclusion
-
-This simple implementation demonstrates basic UDP communication between a server and multiple clients using Java. The server can handle multiple clients and keeps track of the messages received from each client. Clients can send messages to the server and terminate the connection by sending "bye".
-
-
-## Authors
-
-- **@waltertaya**
-- **@Clint171**
-- **@lemwas**
-- **@CHEGGEBB**
-- **@Baruk**
